@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0c0b09" />
+  <title>VETA — Minería de datos</title>
+  <meta name="description" content="Observatorio visual de minería de datos: glucosa, consumo de energía y precio del dólar." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%230c0b09' width='32' height='32'/%3E%3Cpath d='M16 4l8 12-8 12-8-12z' fill='none' stroke='%23e8b86d' stroke-width='1.6'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,560;1,9..144,460&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <div class="progreso" id="progreso"></div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="marca" href="#inicio" aria-label="VETA, inicio">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 1.2 14.2 8 8 14.8 1.8 8Z" fill="none" stroke="#e8b86d" stroke-width="1.2"/>
+        </svg>
+        VETA
+      </a>
+      <nav class="nav-links" aria-label="Secciones">
+        <a href="#atlas">Atlas</a>
+        <a href="#glucosa">Glucosa</a>
+        <a href="#energia">Energía</a>
+        <a href="#dolar">Dólar</a>
+        <a href="#muestras">Muestras</a>
+        <a href="#modelos">Modelos</a>
+        <a href="#metodo">Método</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <svg class="hero-trazo" viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+        <path id="hero-trazo" fill="none" stroke="rgba(232,184,109,0.45)" stroke-width="1.6" />
+      </svg>
+      <div class="contenedor hero-grid">
+        <div>
+          <p class="ceja">Observatorio · Minería de datos</p>
+          <h1>Tres vetas,<br><em>una lectura.</em></h1>
+          <p class="bajada">Glucosa, consumo de energía y precio del dólar. Doce mil quinientos registros descritos, relacionados y modelados.</p>
+          <div class="hero-meta">
+            <div><strong>2.000</strong><span>personas</span></div>
+            <div><strong>10.000</strong><span>lecturas de energía</span></div>
+            <div><strong>500</strong><span>días del dólar</span></div>
+          </div>
+        </div>
+        <aside class="panel-hero" aria-label="Ajuste de los tres modelos">
+          <p>Varianza explicada · R²</p>
+          <div class="medidor">
+            <b>Glucosa</b>
+            <div class="pista"><i id="barra-g" style="width:68.5%;background:var(--glucosa)"></i></div>
+            <em>0,69</em>
+          </div>
+          <div class="medidor">
+            <b>Energía</b>
+            <div class="pista"><i id="barra-e" style="width:90.1%;background:var(--energia)"></i></div>
+            <em>0,90</em>
+          </div>
+          <div class="medidor">
+            <b>Dólar</b>
+            <div class="pista"><i id="barra-d" style="width:99.5%;background:var(--dolar)"></i></div>
+            <em>0,99</em>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="atlas" id="atlas">
+      <div class="contenedor">
+        <div class="seccion-cabeza">
+          <h2>El mapa de las tres vetas.</h2>
+          <p>Cada conjunto esconde un motor distinto. Entra a la veta para ver la nube, la correlación y el modelo.</p>
+        </div>
+        <div class="fichas">
+          <a class="ficha" href="#glucosa" style="--accent: var(--glucosa)">
+            <small>01 · Salud</small>
+            <h3>Glucosa</h3>
+            <p>La edad ordena el nivel casi en escalera. El cuerpo y el movimiento corrigen el resto.</p>
+            <span class="ir">Abrir la veta →</span>
+          </a>
+          <a class="ficha" href="#energia" style="--accent: var(--energia)">
+            <small>02 · Consumo</small>
+            <h3>Energía</h3>
+            <p>Calor y hora del día explican nueve de cada diez puntos del consumo.</p>
+            <span class="ir">Abrir la veta →</span>
+          </a>
+          <a class="ficha" href="#dolar" style="--accent: var(--dolar)">
+            <small>03 · Divisa</small>
+            <h3>Dólar</h3>
+            <p>El precio sube casi en línea recta. El calendario se come a la inflación y a la tasa.</p>
+            <span class="ir">Abrir la veta →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="capitulo" id="glucosa" data-tono="glucosa">
+      <div class="contenedor">
+        <div class="cabecera-cap">
+          <p class="indice" aria-hidden="true">01</p>
+          <div>
+            <p class="kicker">Salud · 2.000 registros</p>
+            <h2>La edad pesa más que el peso.</h2>
+          </div>
+          <p class="cita">El nivel medio es 139,6. Entre los 20 y los 29 años la media baja a 108; entre los 70 y los 79 llega a 170. El IMC empuja poco. La actividad física sí resta: el grupo que más se mueve queda unos doce puntos por debajo del que casi no se mueve.</p>
+        </div>
+
+        <div class="metricas" id="metricas-glucosa"></div>
+
+        <div class="rejilla">
+          <article class="panel">
+            <header>
+              <h3>Edad y nivel de glucosa</h3>
+              <span>mg/dL · cada punto es una persona</span>
+            </header>
+            <div class="lienzo" id="chart-g-scatter"></div>
+            <p class="nota" id="nota-decada">Toca una barra de edad para aislar esa década en esta nube. La línea es la tendencia lineal. El eje vertical cubre el rango observado, de 43 a 228 mg/dL.</p>
+          </article>
+          <article class="panel">
+            <header>
+              <h3>Correlación con la glucosa</h3>
+              <span>Pearson · de −1 a +1</span>
+            </header>
+            <div id="corr-glucosa"></div>
+            <p class="nota">Cero queda en el centro. Hacia la derecha, la variable sube junto con la glucosa. Hacia la izquierda, se mueve al revés.</p>
+          </article>
+        </div>
+
+        <div class="rejilla">
+          <article class="panel">
+            <header>
+              <h3>Glucosa media por década de edad</h3>
+              <span>mg/dL</span>
+            </header>
+            <div class="lienzo" id="chart-g-edad"></div>
+            <p class="nota">El eje no empieza en cero: así se lee el salto entre décadas. Cada barra es el promedio del grupo.</p>
+          </article>
+          <article class="panel">
+            <header>
+              <h3>Actividad física</h3>
+              <span>promedio de glucosa</span>
+            </header>
+            <div class="actividad" id="act-glucosa"></div>
+            <p class="nota">Baja reúne puntuaciones 0 a 2; media, 3 a 5; alta, 6 a 9. La escala es la del archivo.</p>
+          </article>
+        </div>
+
+        <article class="panel bloque">
+          <header>
+            <h3>Consola del modelo</h3>
+            <span>regresión lineal múltiple</span>
+          </header>
+          <form class="consola" data-modelo="glucosa">
+            <div>
+              <div class="control">
+                <div class="control-top"><label for="g-edad">Edad</label><output id="g-edad-out">49</output></div>
+                <input id="g-edad" type="range" min="20" max="79" step="1" value="49" data-clave="Edad" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="g-imc">IMC</label><output id="g-imc-out">25,0</output></div>
+                <input id="g-imc" type="range" min="11" max="39" step="0.1" value="25" data-clave="IMC" data-decimales="1" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="g-act">Actividad física</label><output id="g-act-out">5</output></div>
+                <input id="g-act" type="range" min="0" max="9" step="1" value="5" data-clave="Actividad_Fisica" />
+              </div>
+            </div>
+            <div class="resultado">
+              <span class="resultado-num" data-salida>139,6</span>
+              <span class="resultado-unidad">mg/dL estimados</span>
+              <p class="ecuacion" data-ecuacion></p>
+              <p class="aviso">Estimación del modelo lineal sobre este conjunto. No es una medición clínica.</p>
+            </div>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="capitulo" id="energia" data-tono="energia">
+      <div class="contenedor">
+        <div class="cabecera-cap">
+          <p class="indice" aria-hidden="true">02</p>
+          <div>
+            <p class="kicker">Consumo · 10.000 lecturas</p>
+            <h2>El calor y la hora mandan.</h2>
+          </div>
+          <p class="cita">El consumo medio ronda 400. Un grado más de temperatura suma casi 10 unidades; una hora más en el reloj suma cerca de 5. De madrugada (horas 1 a 6) el promedio es 357. Al cierre del día (horas 18 a 24) sube a 442. El día de la semana apenas inclina la balanza.</p>
+        </div>
+
+        <div class="metricas" id="metricas-energia"></div>
+
+        <div class="rejilla">
+          <article class="panel">
+            <header>
+              <h3>Temperatura y consumo</h3>
+              <span>muestra de las 10.000 lecturas</span>
+            </header>
+            <div class="lienzo" id="chart-e-scatter"></div>
+            <p class="nota">Cada punto es una lectura. La línea resume la relación lineal con la temperatura, en grados de la escala del archivo.</p>
+          </article>
+          <article class="panel">
+            <header>
+              <h3>Correlación con el consumo</h3>
+              <span>Pearson · de −1 a +1</span>
+            </header>
+            <div id="corr-energia"></div>
+            <p class="nota">La temperatura es la señal fuerte. El día de la semana queda casi pegado al cero.</p>
+          </article>
+        </div>
+
+        <div class="rejilla">
+          <article class="panel">
+            <header>
+              <h3>Consumo medio a lo largo del día</h3>
+              <span>hora 1 a hora 24</span>
+            </header>
+            <div class="lienzo" id="chart-e-hora"></div>
+            <p class="nota">Promedio de consumo en cada hora. El eje se recorta al rango de esas medias para que se vea la subida del día.</p>
+          </article>
+          <article class="panel">
+            <header>
+              <h3>Día de la semana</h3>
+              <span>consumo medio · codificación 1 a 7</span>
+            </header>
+            <div class="lienzo" id="chart-e-dia"></div>
+            <p class="nota">La diferencia entre el día 1 y el día 7 es pequeña frente al efecto de la temperatura y de la hora. El archivo no nombra el calendario.</p>
+          </article>
+        </div>
+
+        <article class="panel bloque">
+          <header>
+            <h3>Reloj de la veta</h3>
+            <span>toca o arrastra una hora</span>
+          </header>
+          <div class="reloj-cuerpo">
+            <div class="lienzo reloj" id="reloj"></div>
+            <div class="reloj-lectura">
+              <p class="reloj-kicker" id="reloj-franja">Mediodía</p>
+              <p class="reloj-num" id="reloj-consumo">399</p>
+              <p class="reloj-unidad">consumo medio en esa hora</p>
+              <p class="reloj-texto" id="reloj-texto"></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel bloque">
+          <header>
+            <h3>Consola del modelo</h3>
+            <span>regresión lineal múltiple</span>
+          </header>
+          <form class="consola" data-modelo="energia">
+            <div>
+              <div class="control">
+                <div class="control-top"><label for="e-temp">Temperatura</label><output id="e-temp-out">25,0</output></div>
+                <input id="e-temp" type="range" min="5" max="45" step="0.1" value="25" data-clave="Temperatura" data-decimales="1" data-sufijo="°" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="e-hora">Hora</label><output id="e-hora-out">12</output></div>
+                <input id="e-hora" type="range" min="1" max="24" step="1" value="12" data-clave="Hora" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="e-dia">Día de la semana</label><output id="e-dia-out">4</output></div>
+                <input id="e-dia" type="range" min="1" max="7" step="1" value="4" data-clave="Dia_Semana" />
+              </div>
+            </div>
+            <div class="resultado">
+              <span class="resultado-num" data-salida>400</span>
+              <span class="resultado-unidad">unidades de consumo estimadas</span>
+              <p class="ecuacion" data-ecuacion></p>
+              <p class="aviso">El consumo está en las unidades del archivo. El modelo explica cerca del 90% de su variación.</p>
+            </div>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="capitulo" id="dolar" data-tono="dolar">
+      <div class="contenedor">
+        <div class="cabecera-cap">
+          <p class="indice" aria-hidden="true">03</p>
+          <div>
+            <p class="kicker">Divisa · 500 días</p>
+            <h2>El tiempo se lo lleva casi todo.</h2>
+          </div>
+          <p class="cita">El precio pasa de 4.025 a 6.479. La subida es tan regular —cerca de cinco unidades por día— que el número de día explica el 99,5% de la serie. Inflación y tasa de interés, por sí solas, casi no se mueven con el precio. Un ajuste altísimo puede ser una pista de que una sola variable se comió a las demás.</p>
+        </div>
+
+        <div class="metricas" id="metricas-dolar"></div>
+
+        <div class="rejilla">
+          <article class="panel">
+            <header>
+              <h3>Precio del dólar a lo largo de 500 días</h3>
+              <span>serie completa</span>
+            </header>
+            <div class="lienzo" id="chart-d-serie"></div>
+            <p class="nota">La línea dorada fina es la serie diaria. La línea clara es la tendencia del modelo, sosteniendo inflación y tasa en su promedio. El eje empieza cerca del mínimo del periodo, no en cero.</p>
+          </article>
+          <article class="panel">
+            <header>
+              <h3>Correlación con el precio</h3>
+              <span>Pearson · de −1 a +1</span>
+            </header>
+            <div id="corr-dolar"></div>
+            <p class="nota">El día roza el techo de la escala. Inflación y tasa quedan junto al centro: en estos datos no traen una señal clara.</p>
+          </article>
+        </div>
+
+        <article class="panel bloque">
+          <header>
+            <h3>Lupa sobre un día real</h3>
+            <span>archivo, no estimación suelta</span>
+          </header>
+          <div class="lupa">
+            <svg id="lupa-cinta" viewBox="0 0 640 72" role="img" aria-label="Recorrido del precio con el día elegido"></svg>
+            <div class="control">
+              <div class="control-top">
+                <label for="lupa-dia">Día del archivo</label>
+                <output id="lupa-dia-out">250</output>
+              </div>
+              <input id="lupa-dia" type="range" min="1" max="500" step="1" value="250" />
+            </div>
+            <div class="lupa-cifras">
+              <div><span>Precio real</span><strong id="lupa-precio">—</strong></div>
+              <div><span>El modelo decía</span><strong id="lupa-modelo">—</strong></div>
+              <div><span>Diferencia</span><strong id="lupa-error">—</strong></div>
+            </div>
+            <p class="lupa-relato" id="lupa-relato"></p>
+          </div>
+        </article>
+
+        <article class="panel bloque">
+          <header>
+            <h3>Consola del modelo</h3>
+            <span>regresión lineal múltiple</span>
+          </header>
+          <form class="consola" data-modelo="dolar">
+            <div>
+              <div class="control">
+                <div class="control-top"><label for="d-dia">Día</label><output id="d-dia-out">250</output></div>
+                <input id="d-dia" type="range" min="1" max="500" step="1" value="250" data-clave="Dia" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="d-inf">Inflación</label><output id="d-inf-out">2,0%</output></div>
+                <input id="d-inf" type="range" min="0.004" max="0.039" step="0.001" value="0.02" data-clave="Inflacion" data-escala="100" data-decimales="1" data-sufijo="%" />
+              </div>
+              <div class="control">
+                <div class="control-top"><label for="d-tasa">Tasa de interés</label><output id="d-tasa-out">5,02</output></div>
+                <input id="d-tasa" type="range" min="3.65" max="6.32" step="0.01" value="5.02" data-clave="Tasa_interes" data-decimales="2" />
+              </div>
+            </div>
+            <div class="resultado">
+              <span class="resultado-num" data-salida>5.212</span>
+              <span class="resultado-unidad">precio estimado</span>
+              <p class="ecuacion" data-ecuacion></p>
+              <p class="aviso">La inflación del archivo está en proporción: 0,02 se muestra aquí como 2%. Mueve el día y verás que el precio apenas reacciona a las otras dos palancas.</p>
+            </div>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="camara" id="muestras">
+      <div class="contenedor">
+        <div class="seccion-cabeza">
+          <h2>Cámara de corte.</h2>
+          <p>Tres registros que sí están en los archivos. Al lado, lo que el modelo habría dicho antes de ver el resultado.</p>
+        </div>
+        <div class="camara-barra">
+          <button type="button" class="extraer" id="extraer">Extraer otro corte</button>
+          <span id="corte-num">Corte 01</span>
+        </div>
+        <div class="trio" id="especimenes"></div>
+      </div>
+    </section>
+
+    <section class="modelos" id="modelos">
+      <div class="contenedor">
+        <div class="seccion-cabeza">
+          <h2>Qué tan bien cierran.</h2>
+          <p>R² es la porción de la variación que el modelo logra contar. RMSE es el error típico, en las mismas unidades de la variable.</p>
+        </div>
+        <div class="trio">
+          <article class="modelo-card" data-tono="glucosa">
+            <h3>Glucosa</h3>
+            <p class="r2">0,69</p>
+            <p>Edad, IMC y actividad dejan fuera cerca de un tercio de la variación. El error típico es de 15 mg/dL. Sirve para ver la pendiente, no para clavar un valor.</p>
+            <p class="pie">RMSE 15,3 mg/dL · n = 2.000</p>
+          </article>
+          <article class="modelo-card" data-tono="energia">
+            <h3>Energía</h3>
+            <p class="r2">0,90</p>
+            <p>El ajuste más útil. Temperatura y hora construyen casi todo el consumo, y el error típico queda en 20 unidades sobre una media de 400.</p>
+            <p class="pie">RMSE 20,1 · n = 10.000</p>
+          </article>
+          <article class="modelo-card" data-tono="dolar">
+            <h3>Dólar</h3>
+            <p class="r2">0,995</p>
+            <p>Cifra deslumbrante y, a la vez, una advertencia. El día solo basta. Inflación y tasa no agregan una historia propia dentro de este archivo.</p>
+            <p class="pie">RMSE 50,2 · n = 500</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="metodo" id="metodo">
+      <div class="contenedor">
+        <div class="seccion-cabeza">
+          <h2>Cómo se leyó.</h2>
+          <p>Tres pasos de minería, los mismos en cada veta. Asociación, no causa.</p>
+        </div>
+        <div class="pasos">
+          <article class="paso">
+            <span>01</span>
+            <h3>Describir</h3>
+            <p>Media, mediana, mínimo, máximo y desviación. Antes de buscar relaciones, hay que saber en qué escala vive cada variable y si alguna se sale del grupo.</p>
+          </article>
+          <article class="paso">
+            <span>02</span>
+            <h3>Relacionar</h3>
+            <p>Correlación de Pearson entre cada atributo y la variable objetivo. Mide una relación lineal: cerca de 1 suben juntas, cerca de −1 se oponen, cerca de 0 no se acompañan en línea recta.</p>
+          </article>
+          <article class="paso">
+            <span>03</span>
+            <h3>Modelar</h3>
+            <p>Regresión lineal múltiple por mínimos cuadrados. Cada coeficiente dice cuánto cambia la estimación si esa variable sube una unidad y las demás se quedan quietas. R² resume el ajuste; RMSE, el error.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie-pagina">
+    <div class="contenedor">
+      <span>VETA · Observatorio de minería de datos</span>
+      <span>Fuentes: glucosa_data.csv · energia_data.csv · dolar_data.csv</span>
+    </div>
+  </footer>
+
+  <script src="js/datos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
