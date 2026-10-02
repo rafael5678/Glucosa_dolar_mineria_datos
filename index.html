@@ -29,8 +29,10 @@
         <a href="#energia">Energía</a>
         <a href="#dolar">Dólar</a>
         <a href="#muestras">Muestras</a>
+        <a href="#predecir">Predecir</a>
         <a href="#modelos">Modelos</a>
         <a href="#metodo">Método</a>
+        <a href="informe.html">Informe</a>
       </nav>
     </div>
   </header>
@@ -381,6 +383,30 @@
       </div>
     </section>
 
+    <section class="sala" id="predecir">
+      <div class="contenedor">
+        <div class="seccion-cabeza">
+          <h2>Escribe un caso.</h2>
+          <p>Digita los valores, con coma o con punto. El modelo entrenado responde con la predicción, el margen y el peso de cada término.</p>
+        </div>
+        <div class="banco" id="banco" data-tono="dolar">
+          <div class="banco-barra">
+            <div class="banco-pestanias" id="pestanias" role="tablist" aria-label="Escenario"></div>
+            <p class="banco-origen" id="banco-origen">Leyendo modelos…</p>
+          </div>
+          <p class="sala-estado" id="sala-estado" role="status">Leyendo los modelos empaquetados…</p>
+          <div class="banco-cuerpo" id="banco-cuerpo"></div>
+        </div>
+        <div class="bitacora" id="bitacora" hidden>
+          <div class="bitacora-cabeza">
+            <h3>Bitácora de esta sesión</h3>
+            <button type="button" class="extraer" id="limpiar-bitacora">Vaciar</button>
+          </div>
+          <ol id="bitacora-lista"></ol>
+        </div>
+      </div>
+    </section>
+
     <section class="modelos" id="modelos">
       <div class="contenedor">
         <div class="seccion-cabeza">
@@ -440,11 +466,12 @@
   <footer class="pie-pagina">
     <div class="contenedor">
       <span>VETA · Observatorio de minería de datos</span>
-      <span>Fuentes: glucosa_data.csv · energia_data.csv · dolar_data.csv · <a href="INFORME.md">Informe</a></span>
+      <span>Fuentes: glucosa_data.csv · energia_data.csv · dolar_data.csv · <a href="informe.html">Informe</a></span>
     </div>
   </footer>
 
   <script src="js/datos.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/prediccion.js"></script>
 </body>
 </html>

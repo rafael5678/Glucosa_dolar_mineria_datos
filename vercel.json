@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/modelos.py": {
+      "includeFiles": "backend/**"
+    },
+    "api/predecir.py": {
+      "includeFiles": "backend/**"
+    }
+  }
+}

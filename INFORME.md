@@ -91,7 +91,7 @@ Se reportan dos medidas de ajuste:
 - **R².** Fracción de la variación de la objetivo que el modelo alcanza a contar. Va de 0 a 1 en estos ajustes.
 - **RMSE.** Raíz del error cuadrático medio. Está en las mismas unidades de la objetivo y se lee como el error típico.
 
-El ajuste se hizo con todos los registros de cada archivo. El R² y el RMSE son, por tanto, de entrenamiento: dicen qué tan bien el modelo recorre los datos que ya vio. No son una prueba sobre registros nuevos.
+El ajuste se hizo con todos los registros de cada archivo, con `LinearRegression` de scikit-learn. El R² y el RMSE son, por tanto, de entrenamiento: dicen qué tan bien el modelo recorre los datos que ya vio. No son una prueba sobre registros nuevos. Cada modelo quedó exportado en un `.joblib` y también en `modelos/`, en JSON, para que el sitio estático pueda predecir sin backend. Si el servidor responde, la página le pide la cifra. Si no hay conexión, usa esos coeficientes empaquetados.
 
 ## 5. Resultados
 
@@ -231,7 +231,36 @@ No se puede afirmar:
 4. En el dólar, el día explica el 99,5 %. La subida es de unos 5 por jornada. Inflación y tasa, en la escala en que de verdad se mueven, no alcanzan a salir del ruido.
 5. Un R² alto no cierra un análisis. Hay que mirar qué variable lo produce y si el error, en las unidades de la objetivo, sigue siendo útil.
 
-## 10. Material del proyecto
+## 10. Modelos exportados y predicción por teclado
+
+Los tres escenarios se pueden consultar escribiendo los valores. La respuesta sale del modelo entrenado.
+
+| Escenario | Archivo | Entrada por teclado | Salida |
+| --- | --- | --- | --- |
+| Glucosa | `backend/models/artefactos/glucosa.joblib` | Edad, IMC, actividad | mg/dL y margen ± RMSE |
+| Energía | `backend/models/artefactos/energia.joblib` | Temperatura, hora, día | Consumo y margen ± RMSE |
+| Dólar | `backend/models/artefactos/dolar.joblib` | Día, inflación, tasa | Precio y margen ± RMSE |
+
+Cada archivo guarda intercepto, coeficientes, R², RMSE, rangos y cuantiles. La copia `*_sklearn.joblib` es el estimador de scikit-learn. La web predice con la primera, para que el despliegue no tenga que abrir un objeto de scikit-learn.
+
+La inflación se escribe como proporción: 0,02 es 2 %. La glucosa estimada no es un diagnóstico.
+
+Capas del backend:
+
+1. **Modelo** (`backend/models`). Carga el `.joblib` y multiplica.
+2. **Servicio** (`backend/services`). Valida números, marca extrapolaciones y arma intervalo, percentil y aportes.
+3. **Controlador** (`backend/controllers`). Traduce la petición.
+4. **Vista** (`backend/views`). JSON `{ok, prediccion}` o `{ok: false, error}`.
+
+En local se sirve con Flask (`python backend/app.py`, puerto 8765). En Vercel, `api/modelos.py` y `api/predecir.py` usan el mismo controlador. La página llama a `/api/modelos` y `/api/predecir`.
+
+Para volver a entrenar:
+
+```bash
+python backend/models/entrenar.py
+```
+
+## 11. Material del proyecto
 
 | Archivo | Qué es |
 | --- | --- |
@@ -240,7 +269,11 @@ No se puede afirmar:
 | `dolar_data.csv` | 500 días de inflación, tasa y precio |
 | `generar_datos.py` | Calcula descripciones, correlaciones, regresión y las series de la página |
 | `js/datos.js` | Resultado de ese cálculo, listo para el navegador |
-| `index.html`, `css/estilos.css`, `js/app.js` | Observatorio visual: gráficos, reloj, lupa y cámara de corte |
+| `backend/models/artefactos/*.joblib` | Modelos exportados de los tres escenarios |
+| `modelos/` | La misma copia, en JSON, para predecir sin backend |
+| `backend/` | Capas modelo, servicio, controlador y vista |
+| `api/modelos.py`, `api/predecir.py` | Las mismas rutas para Vercel |
+| `index.html`, `css/estilos.css`, `js/app.js`, `js/prediccion.js` | Observatorio, gráficos y predicción por teclado |
 
 Para regenerar los números de la página:
 
@@ -248,4 +281,4 @@ Para regenerar los números de la página:
 python generar_datos.py
 ```
 
-La página se abre con `index.html`. Ahí están los gráficos de este informe, la consola de cada modelo, el reloj de 24 horas del consumo, la lupa día a día del dólar y la cámara que compara un registro real con lo que el modelo habría dicho.
+La página se abre con `index.html` a través del servidor (`python backend/app.py`). Ahí están los gráficos de este informe, la consola de cada modelo, el reloj de 24 horas del consumo, la lupa día a día del dólar, la cámara de corte y la sala Predecir, donde se escriben los tres casos.
